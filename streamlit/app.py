@@ -46,7 +46,7 @@ def on_text_input():
 
     # TODO: CALL API HERE
     final_res: Response = requests.post(
-        f'http://localhost:8000/travel_assistant?prompt={st.session_state.input_user_msg}',)
+        f'http://localhost:80/travel_assistant?prompt={st.session_state.input_user_msg}',)
 
     # Convert the bytes object to a JSON object
     response_json = json.loads(final_res.content.decode('utf-8'))
@@ -65,7 +65,7 @@ def on_text_input():
     thread_message = response_json["openai_response"]["data"]
     thread_id = response_json["openai_response"]["data"][0]["thread_id"]
 
-    st.session_state.databast_request_data = f"http://localhost:8000/save_chat?last_prompt={
+    st.session_state.databast_request_data = f"http://localhost:80/save_chat?last_prompt={
         st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
 
 

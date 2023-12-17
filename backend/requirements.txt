@@ -1,0 +1,6 @@
+fastapi
+openai
+requests
+uvicorn
+python-dotenv
+SQLAlchemy
