@@ -5,7 +5,7 @@ router = APIRouter(prefix="/save_chat")
 
 
 @router.post("/")
-def save_thread_to_db(last_prompt: str, thread_id: int, thread_message):
+def save_thread_to_db(last_prompt: str, thread_id: str, thread_message):
     try:
         # Use the validated prompt from Pydantic model
         response = save_chat_db(

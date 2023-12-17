@@ -8,11 +8,11 @@ import os
 from ..model.save_chat_db import UserInteraction, Base
 
 
-def save_chat_db(thread_id: int, last_prompt: str, thread_message: str) -> str:
+def save_chat_db(thread_id: str, last_prompt: str, thread_message: str) -> str:
     """Inserts or Update a thread into the database.
 
     Args:
-        thread_id (int): The thread's ID.
+        thread_id (str): The thread's ID.
         last_prompt (str): The last_prompt of user.
         thread_message: All User Interaction.
     """

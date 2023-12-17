@@ -4,3 +4,4 @@ requests
 uvicorn
 python-dotenv
 SQLAlchemy
+psycopg2
