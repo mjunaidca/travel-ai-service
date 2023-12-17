@@ -135,6 +135,10 @@ Add your Environment Variables and change the port from 8080 to 80 (this is what
 
 Or you can directly visit Google Run and click on Create a Service. Fill in the details to deploy your docker image
 
+6. Now Get your Google Deplyment URL and replace streamlit localhost:8000 port backend calls with it.
+
+Firstly past the url in browser and you will see ""top here"" text. Next repalce it with streamlit
+
 ## Contributing
 
 Contributions to this project are welcome. To contribute:
