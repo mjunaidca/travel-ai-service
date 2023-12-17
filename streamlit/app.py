@@ -29,6 +29,10 @@ if "markers_state" not in st.session_state:
 if "conversation_state" not in st.session_state:
     st.session_state.conversation_state = []
 
+    # Save Database Post URL in Session
+if "databast_request_data" not in st.session_state:
+    st.session_state.databast_request_data = None
+
 
 def on_text_input():
     """Callback method for any chat_input value change"""
@@ -61,10 +65,8 @@ def on_text_input():
     thread_message = response_json["openai_response"]["data"]
     thread_id = response_json["openai_response"]["data"][0]["thread_id"]
 
-    save_res_to_db = requests.post(f"http://localhost:8000/save_chat?last_prompt={
-                                   st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}")
-
-    print("save_res_to_db", save_res_to_db)
+    st.session_state.databast_request_data = f"http://localhost:8000/save_chat?last_prompt={
+        st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
 
 
 left_col, right_col = st.columns(2)
@@ -101,7 +103,7 @@ with right_col:
         )
     figure.update_layout(
         mapbox=dict(
-            # accesstoken=MAPBOX_ACCESS_TOKEN,
+            # accesstoken=MAPBOX_ACCESS_TOKEN, # use it for maps styling if needed
             style="open-street-map",
             center=go.layout.mapbox.Center(
                 lat=st.session_state.map["latitude"],
@@ -118,6 +120,9 @@ with right_col:
         use_container_width=True,
         key="plotly"
     )
+
+    if st.session_state.databast_request_data is not None:
+        save_res_to_db = requests.post(st.session_state.databast_request_data)
 
 st.chat_input(
     placeholder="Share 3 places in UAE nearby to each other I can visit in december holidays",

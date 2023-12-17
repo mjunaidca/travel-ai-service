@@ -12,21 +12,23 @@ import os
 
 _: bool = load_dotenv(find_dotenv())  # read local .env file
 
+client: OpenAI = OpenAI()
+
+# TODO: If Assistant is present in env no need to retrive & verify it.
+TRAVEL_ASSISTANT_ID = os.environ.get("TRAVEL_ASSISTANT_ID")
+
+# Initialize Travel Assistant Class
+travel_agent_call: GetAssistant = GetAssistant(
+    client=client)
+
+# Retrieve the Travel Assistant
+travel_assistant: Assistant = travel_agent_call.retrieve_assistant(
+    TRAVEL_ASSISTANT_ID)
+
+print("travel_assistant.id", travel_assistant.id)
+
 
 def call_travel_assistant(prompt: str, file_ids: list[str] = []) -> tuple[list[ThreadMessage], str]:
-
-    client: OpenAI = OpenAI()
-
-    # TODO: If Assistant Id is present in env no need to retrive & verify it.
-    TRAVEL_ASSISTANT_ID = os.environ.get("TRAVEL_ASSISTANT_ID")
-    
-    # Initialize Travel Assistant Class
-    travel_agent_call: GetAssistant = GetAssistant(
-        client=client)
-
-    # Retrieve the Travel Assistant
-    travel_assistant: Assistant = travel_agent_call.retrieve_assistant(
-        TRAVEL_ASSISTANT_ID)
 
     # TODO: If new thread is  not required use Existing One
     # Initialize Thread Class
