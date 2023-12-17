@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 from service.travel_agent_call import call_travel_assistant
+from utils.add_markers import markers_state
+from utils.update_map import map_state
 
 router = APIRouter(prefix="/travel_assistant")
 
@@ -18,8 +20,8 @@ def travel_assistant(prompt: str):
         print('thread_id', thread_id)
 
         return {
-            # "markers_state": markers_state,
-            # "map_state": map_state,
+            "markers_state": markers_state,
+            "map_state": map_state,
             "openai_response": response
         }
     except Exception as e:
