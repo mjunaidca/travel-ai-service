@@ -15,9 +15,11 @@
    - [Streamlit Frontend](#streamlit-frontend)
    - [FastAPI Backend Service](#fastapi-backend-service)
 7. [Usage](#usage)
-8. [Contributing](#contributing)
-9. [License](#license)
-10. [Contact](#contact)
+8. [Containorization & Deployment](#containorization-&-deployment)
+   - [1. Backend - Create Docker image and Deplpoy on Google Cloud Run](#1.-backend---create-docker-image-and-deplpoy-on-google-cloud-run)
+9. [Contributing](#contributing)
+10. [License](#license)
+11. [Contact](#contact)
 
 ## Overview
 
@@ -84,6 +86,54 @@ Ensure that both the frontend and backend services are running simultaneously fo
 ## Usage
 
 With both the frontend and backend services running, access the Streamlit application in your web browser and interact with the travel assistant's features.
+
+## Containorization & Deployment
+
+### 1. Backend - Create Docker image and Deplpoy on Google Cloud Run
+
+Let's create a docker image first and run the frontend using a container running from this image.
+
+Next we will push the image and deply our backend on Google Run
+
+1. Build Docker Image
+
+`docker build -t travel_ai_service .`
+
+For Mac M2 Users use this command instead: `docker buildx build --platform linux/amd64 -t <Image Name> .`
+
+2. View your Image
+
+docker images
+
+3.  Run the Contianer for thus Image
+
+```
+docker run --env-file .env  -d --name 2bd90a3c026f -p 80:80 travel_ai_assistant
+```
+
+4.  Tag Your Image and Push it on Docker Hub
+
+```
+docker tag travel_ai_assistant mjunaidca/travel_ai_assistant:latest
+```
+
+```
+ docker push mjunaidca/travel_ai_assistant:latest
+```
+
+5. Deply your service on Google Cloud
+
+Through Cli
+
+```
+ gcloud run deploy ai-travel-assistant --image mjunaidca/travel_ai_assistant:latest
+```
+
+Then Go to Google Cloud and Click on "Edit & Deply New Revision"
+
+Add your Environment Variables and change the port from 8080 to 80 (this is what we configured in dockerfile).
+
+Or you can directly visit Google Run and click on Create a Service. Fill in the details to deploy your docker image
 
 ## Contributing
 
