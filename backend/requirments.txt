@@ -1,6 +1,4 @@
 fastapi
 openai
-plotly
 requests
-streamlit
 uvicorn
