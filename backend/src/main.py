@@ -3,9 +3,11 @@ import uvicorn
 from fastapi import FastAPI
 
 from web import travel_agent_call
+from web import save_chat_db
 
 app = FastAPI()
 app.include_router(travel_agent_call.router)
+app.include_router(save_chat_db.router)
 
 
 @app.get("/")

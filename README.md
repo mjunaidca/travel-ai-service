@@ -2,6 +2,22 @@
 
 - FastAPI Backend To Manage and Scale Microservice
 - A Simple Streamlit Frontend to test your MVP
+- Save and Update Client Chat in Neon Postgress Database
+
+# Table of Contents
+
+1. [Travel Assistant Complete MicroService](#travel-assistant-complete-microservice)
+2. [Overview](#overview)
+3. [Features](#features)
+4. [Prerequisites](#prerequisites)
+5. [Installation](#installation)
+6. [Setup and Running the Application](#setup-and-running-the-application)
+   - [Streamlit Frontend](#streamlit-frontend)
+   - [FastAPI Backend Service](#fastapi-backend-service)
+7. [Usage](#usage)
+8. [Contributing](#contributing)
+9. [License](#license)
+10. [Contact](#contact)
 
 ## Overview
 
@@ -27,6 +43,10 @@ Before running the application, ensure you have the following installed:
 ## Installation
 
 Clone the repository to your local machine:
+
+## Environment Variables Setup
+
+Rename .env.template to .env and add your API Keys and Database URLs there. Create an issue or feel free to message me if you face any issue while setting up the application
 
 ## Setup and Running the Application
 

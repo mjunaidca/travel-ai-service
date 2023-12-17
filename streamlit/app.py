@@ -42,7 +42,7 @@ def on_text_input():
 
     # TODO: CALL API HERE
     final_res: Response = requests.post(
-        'http://localhost:8000/travel_assistant?prompt="Share 2 places to visit in UAE"',)
+        f'http://localhost:8000/travel_assistant?prompt={st.session_state.input_user_msg}',)
 
     # Convert the bytes object to a JSON object
     response_json = json.loads(final_res.content.decode('utf-8'))
@@ -57,6 +57,14 @@ def on_text_input():
         for message in response_json["openai_response"]["data"]
         if 'role' in message and 'content' in message
     ]
+
+    thread_message = response_json["openai_response"]["data"]
+    thread_id = response_json["openai_response"]["data"][0]["thread_id"]
+
+    save_res_to_db = requests.post(f"http://localhost:8000/save_chat?last_prompt={
+                                   st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}")
+
+    print("save_res_to_db", save_res_to_db)
 
 
 left_col, right_col = st.columns(2)
