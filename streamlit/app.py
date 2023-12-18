@@ -50,7 +50,8 @@ def on_text_input():
     )
 
     # TODO: CALL API HERE
-    final_res: Response = requests.post(f'{BACKEND_API_URL}/travel_assistant/?prompt={st.session_state.input_user_msg}',)
+    final_res: Response = requests.post(
+        f'{BACKEND_API_URL}/travel_assistant/?prompt={st.session_state.input_user_msg}',)
 
     # Convert the bytes object to a JSON object
     response_json = json.loads(final_res.content.decode('utf-8'))
@@ -69,7 +70,8 @@ def on_text_input():
     thread_message = response_json["openai_response"]["data"]
     thread_id = response_json["openai_response"]["data"][0]["thread_id"]
 
-    st.session_state.databast_request_data = f"{BACKEND_API_URL}/save_chat/?last_prompt={st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
+    st.session_state.databast_request_data = f"{BACKEND_API_URL}/save_chat/?last_prompt={
+        st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
 
 
 left_col, right_col = st.columns(2)
@@ -106,7 +108,7 @@ with right_col:
         )
     figure.update_layout(
         mapbox=dict(
-            accesstoken=MAPBOX_ACCESS_TOKEN, # use it for maps styling if needed
+            accesstoken=MAPBOX_ACCESS_TOKEN,  # use it for maps styling if needed
             # style="open-street-map",
             center=go.layout.mapbox.Center(
                 lat=st.session_state.map["latitude"],

@@ -1,113 +1,215 @@
-import Image from 'next/image'
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import GoogleMapComponent from "./ui/GoogleMapComponent";
+import ChatBox from "./ui/ChatBox";
+
+const Home = () => {
+  const [mapState, setMapState] = useState({
+    latitude: 25.1972,
+    longitude: 55.2744,
+    zoom: 7,
+  });
+  const [markers, setMarkers] = useState([]);
+  const [messages, setMessages] = useState<any>([]); // Add this line
+
+  const handleApiResponse = (
+    newMapState: any,
+    newMarkersState: any,
+    userMessage: string,
+    aiResponse: string
+  ) => {
+    setMapState({
+      latitude: newMapState.latitude,
+      longitude: newMapState.longitude,
+      zoom: newMapState.zoom,
+    });
+
+    const transformedMarkers = newMarkersState.map((marker: any) => ({
+      lat: marker.lat,
+      lng: marker.lng,
+      label: marker.label,
+    }));
+
+    setMarkers(transformedMarkers);
+    setMessages((prevMessages: any) => [
+      { user: userMessage, ai: aiResponse },
+      ...prevMessages,
+    ]); // Add this line
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="flex flex-col-reverse md:flex-row min-h-screen items-center justify-center">
+      <div className="w-full md:w-1/2 h-full flex flex-col items-center justify-center m-4">
+        <div className="overflow-y-auto max-h-[400px] h-full sm:max-h-[460px] md:max-h-[520px] lg:max-h-[570px] xl:max-h-[600px] w-full">
+          {messages.map((msg: any, index: any) => (
+            <div key={index} className="m-2 p-2 bg-white rounded-lg shadow-md">
+              <p>
+                <strong>User:</strong> {msg.user}
+              </p>
+              <p>
+                <strong>AI:</strong> {msg.ai}
+              </p>
+            </div>
+          ))}
         </div>
+        <ChatBox onApiResponse={handleApiResponse} />
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <div className="w-full md:w-1/2 h-full bg-blue-400 flex items-center justify-center m-4">
+        <GoogleMapComponent
+          center={{ lat: mapState.latitude, lng: mapState.longitude }}
+          zoom={mapState.zoom}
+          markers={markers}
         />
       </div>
+    </div>
+  );
+};
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+export default Home;
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+// import {
+//   useLoadScript,
+//   GoogleMap,
+//   MarkerF,
+//   CircleF,
+// } from "@react-google-maps/api";
+// import type { NextPage } from "next";
+// import { useMemo, useState } from "react";
+// import usePlacesAutocomplete, {
+//   getGeocode,
+//   getLatLng,
+// } from "use-places-autocomplete";
+// import styles from "./Home.module.css";
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+// const Home: NextPage = () => {
+//   const [lat, setLat] = useState(27.672932021393862);
+//   const [lng, setLng] = useState(85.31184012689732);
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+//   const libraries = useMemo(() => ["places"], []);
+//   const mapCenter = useMemo(() => ({ lat: lat, lng: lng }), [lat, lng]);
+
+//   const mapOptions = useMemo<google.maps.MapOptions>(
+//     () => ({
+//       disableDefaultUI: true,
+//       clickableIcons: true,
+//       scrollwheel: false,
+//     }),
+//     []
+//   );
+
+//   const { isLoaded } = useLoadScript({
+//     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
+//     libraries: libraries as any,
+//   });
+
+//   if (!isLoaded) {
+//     return <p>Loading...</p>;
+//   }
+
+//   return (
+//     <div className={styles.homeWrapper}>
+//       <div className={styles.sidebar}>
+//         {/* render Places Auto Complete and pass custom handler which updates the state */}
+//         <PlacesAutocomplete
+//           onAddressSelect={(address) => {
+//             getGeocode({ address: address }).then((results) => {
+//               const { lat, lng } = getLatLng(results[0]);
+
+//               setLat(lat);
+//               setLng(lng);
+//             });
+//           }}
+//         />
+//       </div>
+//       <GoogleMap
+//         options={mapOptions}
+//         zoom={14}
+//         center={mapCenter}
+//         mapTypeId={google.maps.MapTypeId.ROADMAP}
+//         mapContainerStyle={{ width: "800px", height: "800px" }}
+//         onLoad={(map) => console.log("Map Loaded")}
+//       >
+//         <MarkerF
+//           position={mapCenter}
+//           onLoad={() => console.log("Marker Loaded")}
+//         />
+
+//         {[1000, 2500].map((radius, idx) => {
+//           return (
+//             <CircleF
+//               key={idx}
+//               center={mapCenter}
+//               radius={radius}
+//               onLoad={() => console.log("Circle Load...")}
+//               options={{
+//                 fillColor: radius > 1000 ? "red" : "green",
+//                 strokeColor: radius > 1000 ? "red" : "green",
+//                 strokeOpacity: 0.8,
+//               }}
+//             />
+//           );
+//         })}
+//       </GoogleMap>
+//     </div>
+//   );
+// };
+
+// const PlacesAutocomplete = ({
+//   onAddressSelect,
+// }: {
+//   onAddressSelect?: (address: string) => void;
+// }) => {
+//   const {
+//     ready,
+//     value,
+//     suggestions: { status, data },
+//     setValue,
+//     clearSuggestions,
+//   } = usePlacesAutocomplete({
+//     requestOptions: { componentRestrictions: { country: "us" } },
+//     debounce: 300,
+//     cache: 86400,
+//   });
+
+//   const renderSuggestions = () => {
+//     return data.map((suggestion) => {
+//       const {
+//         place_id,
+//         structured_formatting: { main_text, secondary_text },
+//         description,
+//       } = suggestion;
+
+//       return (
+//         <li
+//           key={place_id}
+//           onClick={() => {
+//             setValue(description, false);
+//             clearSuggestions();
+//             onAddressSelect && onAddressSelect(description);
+//           }}
+//         >
+//           <strong>{main_text}</strong> <small>{secondary_text}</small>
+//         </li>
+//       );
+//     });
+//   };
+
+//   return (
+//     <div className={styles.autocompleteWrapper}>
+//       <input
+//         value={value}
+//         className={styles.autocompleteInput}
+//         disabled={!ready}
+//         onChange={(e) => setValue(e.target.value)}
+//         placeholder="123 Stariway To Heaven"
+//       />
+
+//       {status === "OK" && (
+//         <ul className={styles.suggestionWrapper}>{renderSuggestions()}</ul>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Home;
