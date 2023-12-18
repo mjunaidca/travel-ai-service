@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
 // Define a schema for the expected request body
 const requestBodySchema = z.object({
   message: z.string(),

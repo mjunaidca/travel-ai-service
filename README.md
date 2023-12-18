@@ -139,6 +139,32 @@ Or you can directly visit Google Run and click on Create a Service. Fill in the 
 
 Firstly past the url in browser and you will see ""top here"" text. Next repalce it with streamlit
 
+### 2. Stream - Simple deply on Streamlit Cloud
+
+### 3. NextJs - Create Docker image and Deplpoy on Google Cloud Run
+
+Why not vercel: Vercel default inocation timeout is 10.01 seconds. Using edge we can increase it to 25 seconds and on top of it using streaming we can increase to to infinite time.
+
+Here average response time with function calling is 30-40s so my plan is to dockerize and deply this on google cloud as well.
+
+```
+docker buildx build --platform linux/amd64 -t nextjs_travel_ai .
+
+docker images
+
+docker run --env-file .env -d --name 4f04288c45a8 -p 3000:8000 nextjs_travel_ai
+
+verify the containor is running and no error occured
+
+docker ps
+
+docker tag nextjs_travel_ai mjunaidca/nextjs_travel_ai:latest
+
+docker push mjunaidca/nextjs_travel_ai:latest
+
+gcloud run deploy nextjs-travel-ai --image mjunaidca/nextjs_travel_ai:latest
+```
+
 ## Contributing
 
 Contributions to this project are welcome. To contribute:

@@ -1,8 +1,6 @@
 "use client";
 
 import { FC, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 interface MapState {
   latitude: number;
@@ -61,7 +59,7 @@ const ChatBox: FC<ChatBoxProps> = ({ onApiResponse }) => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/api/sendMessage`,
+        `/api/sendMessage`,
         {
           method: "POST",
           headers: {

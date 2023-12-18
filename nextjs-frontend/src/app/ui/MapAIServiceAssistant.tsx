@@ -48,8 +48,6 @@ const MapAIServiceAssistant = () => {
               key={index}
               userMessage={msg.user}
               aiResponse={msg.ai}
-              userImage="https://dummyimage.com/128x128/363536/ffffff&text=U" // User image URL
-              aiImage="https://dummyimage.com/128x128/354ea1/ffffff&text=A" // AI image URL
             />
           ))}
         </div>
