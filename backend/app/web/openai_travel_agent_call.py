@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ..service.travel_agent_call import call_travel_assistant
+from ..service.openai_travel_agent_call import call_travel_assistant
 from ..utils.add_markers import markers_state
 from ..utils.update_map import map_state
 
@@ -7,7 +7,7 @@ router = APIRouter(prefix="/travel_assistant")
 
 
 @router.post("/")
-def travel_assistant(prompt: str):
+def openai_travel_assistant(prompt: str):
     try:
         # Use the validated prompt from Pydantic model
         response, thread_id = call_travel_assistant(prompt)

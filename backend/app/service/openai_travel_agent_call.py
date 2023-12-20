@@ -17,6 +17,7 @@ client: OpenAI = OpenAI()
 # TODO: If Assistant is present in env no need to retrive & verify it.
 TRAVEL_ASSISTANT_ID = os.environ.get("TRAVEL_ASSISTANT_ID")
 
+
 # Initialize Travel Assistant Class
 travel_agent_call: GetAssistant = GetAssistant(
     client=client)
@@ -27,13 +28,13 @@ travel_assistant: Assistant = travel_agent_call.retrieve_assistant(
 
 print("travel_assistant.id", travel_assistant.id)
 
+# TODO: If new thread is  not required use Existing One
+# Initialize Thread Class
+thread_call: CreateThread = CreateThread(
+    client=client)
+
 
 def call_travel_assistant(prompt: str, file_ids: list[str] = []) -> tuple[list[ThreadMessage], str]:
-
-    # TODO: If new thread is  not required use Existing One
-    # Initialize Thread Class
-    thread_call: CreateThread = CreateThread(
-        client=client)
 
     # Create a Thread
     thread: Thread = thread_call.create_thread()
