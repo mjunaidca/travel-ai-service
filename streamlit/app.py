@@ -55,8 +55,7 @@ def on_text_input_gemini():
         ("user", st.session_state.input_user_msg)
     )
 
-    final_res = requests.get(
-        f'{BACKEND_API_URL}/gemini_streaming_travel_ai/?query={st.session_state.input_user_msg}', stream=True)
+    final_res = requests.get(f'{BACKEND_API_URL}/gemini_streaming_travel_ai/?query={st.session_state.input_user_msg}', stream=True)
 
     if final_res.encoding is None:
         final_res.encoding = 'utf-8'
@@ -116,8 +115,7 @@ def on_text_input_openai():
     thread_message = response_json["openai_response"]["data"]
     thread_id = response_json["openai_response"]["data"][0]["thread_id"]
 
-    st.session_state.databast_request_data = f"{BACKEND_API_URL}/save_chat/?last_prompt={
-        st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
+    st.session_state.databast_request_data = f"{BACKEND_API_URL}/save_chat/?last_prompt={st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
 
 
 # Choose which function to call based on API selection
