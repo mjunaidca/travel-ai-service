@@ -62,8 +62,7 @@ def update_map_and_markers(latitude: float, longitude: float, zoom: float, latit
 
         return {"status": "Map location and markers updated successfully. Now only assist the travellers - no function calling", "values": ai_powered_map}
     except (ValueError, TypeError) as e:
-        raise ValueError({"status": f"Error in update_map_and_markers function: {
-                         e}, Now only assist the travellers - no function calling", "values": ai_powered_map})
+        raise ValueError({"status": f"Error in update_map_and_markers function: {e}, Now only assist the travellers - no function calling", "values": ai_powered_map})
 
 
 map_ai_update_and_markers_func = FunctionDeclaration(
