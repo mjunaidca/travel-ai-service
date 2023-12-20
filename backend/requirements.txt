@@ -5,3 +5,4 @@ uvicorn
 python-dotenv
 SQLAlchemy
 psycopg2
+google-cloud-aiplatform

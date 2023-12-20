@@ -60,6 +60,6 @@ async def stream(query: str):
 @router.get("/mapstate")
 def get_latest_map_state():
     return {
-        "markers_state": ai_powered_map['map_state'],
+        "markers_state": ai_powered_map['markers_state'],
         "map_state": ai_powered_map['map_state']
     }

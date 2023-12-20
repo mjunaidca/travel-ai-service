@@ -62,8 +62,7 @@ def update_map_and_markers(latitude: float, longitude: float, zoom: float, latit
 
         return {"status": "Map location and markers updated successfully. Now only assist the travellers - no function calling", "values": ai_powered_map}
     except (ValueError, TypeError) as e:
-        raise ValueError({"status": f"Error in update_map_and_markers function: {
-                         e}, Now only assist the travellers - no function calling", "values": ai_powered_map})
+        raise ValueError({"status": f"Error in update_map_and_markers function: {e}, Now only assist the travellers - no function calling", "values": ai_powered_map})
 
 
 map_ai_update_and_markers_func = FunctionDeclaration(
@@ -120,13 +119,7 @@ available_functions = {
 
 
 # Load Gemini Pro
-gemini_pro_model: GenerativeModel = GenerativeModel("gemini-pro",
-                                                    generation_config={
-                                                        "temperature": 0.4},
-                                                    tools=[
-                                                        map_ai_tool]
-                                                    )
-
+gemini_pro_model: GenerativeModel = GenerativeModel("gemini-pro",generation_config={"temperature": 0.4}, tools=[map_ai_tool])
 
 message1: Content = Content(role="user", parts=[Part.from_text(BASE_PROMPT)])
 message2: Content = Content(role="model", parts=[Part.from_text("Got It")])
@@ -138,8 +131,7 @@ class TravelAIChat():
     def __init__(self, gemini_pro_model: GenerativeModel, initial_history=chat_history):
         if gemini_pro_model is None:
             raise ValueError("Gemini Pro Model is not set!")
-        self.assistant: GenerativeModel = gemini_pro_model.start_chat(
-            history=initial_history)
+        self.assistant: GenerativeModel = gemini_pro_model.start_chat(history=initial_history)
 
     # PGet History
     def get_history(self):
@@ -148,11 +140,9 @@ class TravelAIChat():
     def run_assistant(self, prompt: str):
 
         if self.assistant is None:
-            raise ValueError(
-                "Assistant is not set. Cannot run assistant without an assistant.")
+            raise ValueError("""Assistant is not set. Cannot run assistant without an assistant.""")
 
-        run_res: Union["GenerationResponse", Iterable["GenerationResponse"]
-                       ] = self.assistant.send_message(prompt, stream=True)
+        run_res: Union["GenerationResponse", Iterable["GenerationResponse"]] = self.assistant.send_message(prompt, stream=True)
         for message in run_res:
 
             for part in message.candidates[0].content.parts:
@@ -250,8 +240,7 @@ class TravelAIChat():
 
                         time.sleep(0.5)
 
-                        list_content: ContentsType = [prompt, json.dumps(map_update_call), f"Now help users with travel planning in {
-                            ' '.join(labels)} - no function calling"]
+                        list_content: ContentsType = [prompt, json.dumps(map_update_call), f"Now help users with travel planning in {' '.join(labels)} - no function calling"]
 
                         print('list_content', list_content)
 
