@@ -1,16 +1,17 @@
 import streamlit as st
-import plotly.graph_objects as go
 import requests
 from requests.models import Response
 import json
 from dotenv import load_dotenv, find_dotenv
+import plotly.graph_objects as go
 import os
 
+# Load environment variables
 _: bool = load_dotenv(find_dotenv())  # read local .env file
-
 MAPBOX_ACCESS_TOKEN = os.environ.get("MAPBOX_TOKEN")
 BACKEND_API_URL = os.environ.get("BACKEND_API_URL")
 
+# Set page configuration
 st.set_page_config(
     page_title="Wandering AI Trips",
     page_icon="🧠",
@@ -18,9 +19,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# Header
 st.header("Wandering AI Trips")
 
-# INITIALIZE AND SETUO SESSION STATES
+# API Selection
+api_choice = st.radio("Select Travel AI FastAPI", ("Gemini Streaming & Functional Calling FastAPI",
+                      "OpenAI Assistants API FastAPI"), index=0)
+
+# Initialize session states
 if "map" not in st.session_state:
     st.session_state.map = {
         "latitude": 39.949610,
@@ -38,8 +44,48 @@ if "conversation_state" not in st.session_state:
 if "databast_request_data" not in st.session_state:
     st.session_state.databast_request_data = None
 
+# Function definition
 
-def on_text_input():
+
+def on_text_input_gemini():
+    if st.session_state.input_user_msg == "":
+        return
+
+    st.session_state.conversation_state.append(
+        ("user", st.session_state.input_user_msg)
+    )
+
+    final_res = requests.get(
+        f'{BACKEND_API_URL}/gemini_streaming_travel_ai/?query={st.session_state.input_user_msg}', stream=True)
+
+    if final_res.encoding is None:
+        final_res.encoding = 'utf-8'
+
+    print('final_res.iter_lines(decode_unicode=True)',
+          final_res.iter_lines(decode_unicode=True))
+
+    for line in final_res.iter_lines(decode_unicode=True):
+        print('line', line)
+        if line.strip():  # Check if line is not empty
+            # Parse the line to extract the message
+            st.session_state.conversation_state.append(
+                ("gemini", line))
+
+    map_state_res = requests.get(
+        f'{BACKEND_API_URL}/gemini_streaming_travel_ai/mapstate')
+    if map_state_res.status_code == 200:
+        new_map_state = map_state_res.json()
+        update_map_state(new_map_state)
+
+
+def update_map_state(new_map_state):
+    # Update only if the map state is different
+    if new_map_state["map_state"] != st.session_state.map or new_map_state["markers_state"] != st.session_state.markers_state:
+        st.session_state.map = new_map_state["map_state"]
+        st.session_state.markers_state = new_map_state["markers_state"]
+
+
+def on_text_input_openai():
     """Callback method for any chat_input value change"""
 
     if st.session_state.input_user_msg == "":
@@ -73,6 +119,9 @@ def on_text_input():
     st.session_state.databast_request_data = f"{BACKEND_API_URL}/save_chat/?last_prompt={
         st.session_state.input_user_msg}&thread_id={thread_id}&thread_message={thread_message}"
 
+
+# Choose which function to call based on API selection
+on_text_input = on_text_input_gemini if api_choice == "Gemini Streaming & Functional Calling FastAPI" else on_text_input_openai
 
 left_col, right_col = st.columns(2)
 

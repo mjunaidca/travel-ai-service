@@ -62,7 +62,8 @@ def update_map_and_markers(latitude: float, longitude: float, zoom: float, latit
 
         return {"status": "Map location and markers updated successfully. Now only assist the travellers - no function calling", "values": ai_powered_map}
     except (ValueError, TypeError) as e:
-        raise ValueError({"status": f"Error in update_map_and_markers function: {e}, Now only assist the travellers - no function calling", "values": ai_powered_map})
+        raise ValueError({"status": f"Error in update_map_and_markers function: {
+                         e}, Now only assist the travellers - no function calling", "values": ai_powered_map})
 
 
 map_ai_update_and_markers_func = FunctionDeclaration(
@@ -119,7 +120,8 @@ available_functions = {
 
 
 # Load Gemini Pro
-gemini_pro_model: GenerativeModel = GenerativeModel("gemini-pro",generation_config={"temperature": 0.4}, tools=[map_ai_tool])
+gemini_pro_model: GenerativeModel = GenerativeModel(
+    "gemini-pro", generation_config={"temperature": 0.4}, tools=[map_ai_tool])
 
 message1: Content = Content(role="user", parts=[Part.from_text(BASE_PROMPT)])
 message2: Content = Content(role="model", parts=[Part.from_text("Got It")])
@@ -131,7 +133,8 @@ class TravelAIChat():
     def __init__(self, gemini_pro_model: GenerativeModel, initial_history=chat_history):
         if gemini_pro_model is None:
             raise ValueError("Gemini Pro Model is not set!")
-        self.assistant: GenerativeModel = gemini_pro_model.start_chat(history=initial_history)
+        self.assistant: GenerativeModel = gemini_pro_model.start_chat(
+            history=initial_history)
 
     # PGet History
     def get_history(self):
@@ -140,9 +143,11 @@ class TravelAIChat():
     def run_assistant(self, prompt: str):
 
         if self.assistant is None:
-            raise ValueError("""Assistant is not set. Cannot run assistant without an assistant.""")
+            raise ValueError(
+                """Assistant is not set. Cannot run assistant without an assistant.""")
 
-        run_res: Union["GenerationResponse", Iterable["GenerationResponse"]] = self.assistant.send_message(prompt, stream=True)
+        run_res: Union["GenerationResponse", Iterable["GenerationResponse"]
+                       ] = self.assistant.send_message(prompt, stream=True)
         for message in run_res:
 
             for part in message.candidates[0].content.parts:
@@ -250,8 +255,8 @@ class TravelAIChat():
                         )
 
                         for message in func_call_gemini_response:
-                            print(message.candidates[0].content.parts[0])
-                            yield (message.candidates[0].content.parts[0])
+                            print(message.candidates[0].content.parts[0].text)
+                            yield (message.candidates[0].content.parts[0].text)
 
                 else:
                     # print("Got Nothing")
