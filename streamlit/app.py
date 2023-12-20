@@ -70,11 +70,13 @@ def on_text_input_gemini():
             st.session_state.conversation_state.append(
                 ("gemini", line))
 
-    map_state_res = requests.get(
-        f'{BACKEND_API_URL}/gemini_streaming_travel_ai/mapstate')
+    map_state_res = requests.get(f'{BACKEND_API_URL}/gemini_streaming_travel_ai/mapstate')
     if map_state_res.status_code == 200:
         new_map_state = map_state_res.json()
         update_map_state(new_map_state)
+
+    st.session_state.databast_request_data = f"{BACKEND_API_URL}/save_chat/?last_prompt={st.session_state.input_user_msg}&thread_id={'GEMINICALL'}&thread_message={st.session_state.conversation_state}"
+
 
 
 def update_map_state(new_map_state):
@@ -95,8 +97,7 @@ def on_text_input_openai():
     )
 
     # TODO: CALL API HERE
-    final_res: Response = requests.post(
-        f'{BACKEND_API_URL}/travel_assistant/?prompt={st.session_state.input_user_msg}',)
+    final_res: Response = requests.post(f'{BACKEND_API_URL}/travel_assistant/?prompt={st.session_state.input_user_msg}',)
 
     # Convert the bytes object to a JSON object
     response_json = json.loads(final_res.content.decode('utf-8'))
@@ -175,6 +176,7 @@ with right_col:
 
     if st.session_state.databast_request_data is not None:
         save_res_to_db = requests.post(st.session_state.databast_request_data)
+        st.session_state.databast_request_data = None
 
 st.chat_input(
     placeholder="Share 3 places in UAE nearby to each other I can visit in december holidays",

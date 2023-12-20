@@ -176,52 +176,51 @@ class TravelAIChat():
                         args = function_call.args
                         # print("Content of 'args':", args)
 
-                        # Initialize variables to store extracted data
-                        zoom, longitude, latitude = None, None, None
+                        # Initialize variables with default values
+                        zoom = ai_powered_map["map_state"].get("zoom")
+                        longitude = ai_powered_map["map_state"].get("longitude")
+                        latitude = ai_powered_map["map_state"].get("latitude")
                         longitudes, latitudes, labels = [], [], []
 
                         # Iterate over each item in 'args'
                         for key, value in args.items():
                             print("Key:", key, "Value:", value)
 
-                            try:
-                                if key == "zoom":
-                                    zoom = value  # Directly assigning the value
-                            except Exception:
-                                pass
+                            if key == "zoom":
+                                try:
+                                    zoom = value
+                                except Exception as e:
+                                    print(f"Error with 'zoom': {e}")
 
-                            try:
-                                if key == "longitude":
-                                    longitude = value  # Directly assigning the value
-                            except Exception:
-                                pass
+                            if key == "longitude":
+                                try:
+                                    longitude = value
+                                except Exception as e:
+                                    print(f"Error with 'longitude': {e}")
 
-                            try:
-                                if key == "longitudes":
-                                    # Direct iteration over the RepeatedComposite
+                            if key == "latitude":
+                                try:
+                                    latitude = value
+                                except Exception as e:
+                                    print(f"Error with 'latitude': {e}")
+
+                            if key == "longitudes":
+                                try:
                                     longitudes = [v for v in value]
-                            except Exception:
-                                pass
+                                except Exception as e:
+                                    print(f"Error with 'longitudes': {e}")
 
-                            try:
-                                if key == "latitude":
-                                    latitude = value  # Directly assigning the value
-                            except Exception:
-                                pass
-
-                            try:
-                                if key == "latitudes":
-                                    # Direct iteration over the RepeatedComposite
+                            if key == "latitudes":
+                                try:
                                     latitudes = [v for v in value]
-                            except Exception:
-                                pass
+                                except Exception as e:
+                                    print(f"Error with 'latitudes': {e}")
 
-                            try:
-                                if key == "labels":
-                                    # Direct iteration over the RepeatedComposite
+                            if key == "labels":
+                                try:
                                     labels = [v for v in value]
-                            except Exception:
-                                pass
+                                except Exception as e:
+                                    print(f"Error with 'labels': {e}")
 
                         # Print extracted values
                         print("zoom =", zoom)
@@ -231,21 +230,20 @@ class TravelAIChat():
                         print("latitudes =", latitudes)
                         print("labels =", labels)
 
-                        map_update_call = function_call_name(labels=labels,
-                                                             latitudes=latitudes,
-                                                             longitudes=longitudes,
-                                                             latitude=latitude or ai_powered_map[
-                                                                 "map_state"]["latitude"],
-                                                             longitude=longitude or ai_powered_map[
-                                                                 "map_state"]["longitude"],
-                                                             zoom=zoom or ai_powered_map["map_state"]["zoom"]
-                                                             )
 
-                        # print("map_update_call", map_update_call)
+                        map_update_call_func = function_call_name(labels=labels,
+                                                                  latitudes=latitudes,
+                                                                  longitudes=longitudes,
+                                                                  latitude=latitude,
+                                                                  longitude=longitude,
+                                                                  zoom=zoom
+                                                                  )
+
+                        print("map_update_call", map_update_call_func)
 
                         time.sleep(0.5)
 
-                        list_content: ContentsType = [prompt, json.dumps(map_update_call), f"Now help users with travel planning in {' '.join(labels)} - no function calling"]
+                        list_content: ContentsType = [prompt, json.dumps(map_update_call_func), f"Now help users with travel planning in {' '.join(labels)} - no function calling. Don;t reshared the map coordinates and markers"]
 
                         print('list_content', list_content)
 
@@ -255,8 +253,17 @@ class TravelAIChat():
                         )
 
                         for message in func_call_gemini_response:
-                            print(message.candidates[0].content.parts[0].text)
-                            yield (message.candidates[0].content.parts[0].text)
+                            part = message.candidates[0].content.parts[0]
+
+                            # Check if 'text' property is present and has content
+                            text_content = part.text if hasattr(part, 'text') else None
+                            if text_content:
+                                print("Got Text:", text_content)
+                                yield text_content
+                            else:
+                                print("No text content available in part:", part)
+                                # Handle the case of no text content if needed
+
 
                 else:
                     # print("Got Nothing")
