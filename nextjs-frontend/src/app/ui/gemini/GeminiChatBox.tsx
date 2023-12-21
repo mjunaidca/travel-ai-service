@@ -140,7 +140,7 @@ const GeminiChatBox = () => {
             id="prompt"
             rows={1}
             className="mx-2 flex  disabled:cursor-not-allowed disabled:opacity-50 min-h-full w-full rounded-md border border-slate-300 bg-slate-200 p-2 text-base text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 dark:border-slate-300/20 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-400 dark:focus:border-blue-600 dark:focus:ring-blue-600"
-            placeholder="Share 3 places in UAE nearby to each other for tech junkie!"
+            placeholder="Let's visit Japan!"
             value={inputValue}
             onChange={handleInputChange}
             disabled={isLoading}

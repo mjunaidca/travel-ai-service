@@ -251,7 +251,7 @@ class TravelAIChat():
 
                             time.sleep(0.5)
 
-                            list_content: ContentsType = [prompt, json.dumps(map_update_call_func["status"]), f"Now help users with travel planning in {' '.join(labels)} - Don't call the function as Map is updated"]
+                            list_content: ContentsType = [json.dumps(map_update_call_func["status"]), f"Now help users with travel planning in {' '.join(labels)} - Don't call the function as Map is updated"]
                             print('list_content', list_content)
 
                             func_call_gemini_response = self.assistant.send_message(
