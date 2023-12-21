@@ -97,7 +97,12 @@ const GeminiChatBox = () => {
     setConversation([...conversation, { sender: "User", message: inputValue }]);
 
     try {
-      const response = await fetch(`/api/streaming-gemini?query=${inputValue}`);
+      const response = await fetch(
+        `/api/streaming-gemini?query=${inputValue}`,
+        {
+          cache: "no-store",
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`);

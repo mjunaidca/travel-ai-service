@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/gemini_streaming_travel_ai/?query=${message}`
+      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/gemini_streaming_travel_ai/?query=${message}`,
+      {
+        cache: "no-store",
+      }
     );
 
     if (!response.ok) {
