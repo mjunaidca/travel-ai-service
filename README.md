@@ -1,39 +1,22 @@
 # Travel Assistant Complete MicroService
 
 - FastAPI Backend To Manage and Scale Microservice
-- A Simple Streamlit Frontend to test your MVP
-- Save and Update Client Chat in Neon Postgress Database
+   - Geminin Pro Function Calling Streaming API
+   - OpenAI Assistants API
 
-Note: To run Gemini Endpoints first setup your google vertex ai account
-```! pip3 install --upgrade --user google-cloud-aiplatform```
-Locally Setup
+- A Simple NextJS 14  Frontend to test your MVP
+- For python geeks a Streamlit Frontend to test your MVP
+- Pydanitc and SQLAlchemy ORM to Save and Update Client Chat in Neon Postgress Database
+
+Note: To locally run Gemini API Endpoints first setup your google vertex ai account
 ```https://cloud.google.com/sdk/docs/initializing```
 
+This Travel Assistant Application is designed to test complete Generative AI Applications Scalable Architecture. 
 
-# Table of Contents
+We have extensively explored gemini pro function calling, and open ai dev day features. The services are developed using FastAPI framework and the Frontend frontier is powered with NextJS 14 as well as streamlit for pure python devs.
 
-1. [Travel Assistant Complete MicroService](#travel-assistant-complete-microservice)
-2. [Overview](#overview)
-3. [Features](#features)
-4. [Prerequisites](#prerequisites)
-5. [Installation](#installation)
-6. [Setup and Running the Application](#setup-and-running-the-application)
-   - [Streamlit Frontend](#streamlit-frontend)
-   - [FastAPI Backend Service](#fastapi-backend-service)
-7. [Usage](#usage)
-8. [Containorization & Deployment](#containorization-&-deployment)
-   - [1. Backend V0 - Create Docker image and Deplpoy on Google Cloud Run](#1.-backend---create-docker-image-and-deplpoy-on-google-cloud-run)
-8. [Containorization & Deployment](#containorization-&-deployment)
-   - [2. Backend V1 - Gemini Streaming Update](#2.-gemini-streaming-endpoint-update)
-9. [Contributing](#contributing)
-10. [License](#license)
-11. [Contact](#contact)
+The AI Powered Maps are powered with "Google Maps javascript API" for NextJS and "Plotly with MapBox" for streamlit.
 
-## Overview
-
-This Travel Assistant Application is designed to provide users with an interactive and informative experience related to travel destinations.
-
-It features a user-friendly interface for exploring various locations and utilizes a Streamlit frontend coupled with a FastAPI backend.
 
 ## Features
 
@@ -46,44 +29,28 @@ gemmini => fastapi backend => nextjs frontend (fully streamed response)
 - Real-time data fetching and display using FastAPI.
 - Easy-to-navigate user interface with Streamlit.
 
-## Prerequisites
+## Locally Run the Project
 
-Before running the application, ensure you have the following installed:
+## Option 1: Run on The Machine
 
-- Python 3.6 or higher
-- Streamlit
-- FastAPI
-- Uvicorn
-
-## Installation
+### A. Installation
 
 Clone the repository to your local machine:
 
-## Environment Variables Setup
+### B. Environment Variables Setup
 
 Rename .env.template to .env and add your API Keys and Database URLs there. Create an issue or feel free to message me if you face any issue while setting up the application
 
-## Setup and Running the Application
+### C. Setup and Running FastAPI Backend Service
 
 Install the required Python packages:
+
+1. Go to the `backend -> src` directory.
 
 ```
 pip install -r requirements.txt
 ```
 
-### Streamlit Frontend
-
-1. Navigate to the streamlit directory containing `app.py`.
-2. Run the Streamlit application using the following command:
-   ```
-   streamlit run app.py
-   ```
-
-Access the frontend at: `http://localhost:8501/`
-
-### FastAPI Backend Service
-
-1. Go to the `backend -> src` directory.
 2. Start the FastAPI server by running:
 
    ```
@@ -95,6 +62,25 @@ Access the frontend at: `http://localhost:8501/`
    `http://localhost:8000/travel_assistant?prompt="Share 2 places to visit in UAE"`
 
 Ensure that both the frontend and backend services are running simultaneously for the application to function properly.
+
+### D.  Streamlit Frontend
+
+1. Navigate to the streamlit directory containing `app.py`.
+2. Run the Streamlit application using the following command:
+   ```
+   streamlit run app.py
+   ```
+
+Access the frontend at: `http://localhost:8501/`
+
+
+### E. NextJS Frontend
+
+Go to nextjs dir, run pnpm install and the pnpm dev
+
+## Option 2: Run on Docker
+
+Pull te docker images and run there
 
 ## Usage
 
