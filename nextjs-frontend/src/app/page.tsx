@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatedPage } from "./ui/AnimatedHero";
 import BottomBar from "@/components/BottomBar";
-import MapAIServiceAssistant from "./ui/openai/MapAIServiceAssistant";
+// import MapAIServiceAssistant from "./ui/openai/MapAIServiceAssistant";
 import GeminiChatBox from "./ui/gemini/GeminiChatBox";
 
 const page = () => {
@@ -15,15 +15,15 @@ const page = () => {
         className=" p-5 flex flex-col items-center justify-center"
       >
         <TabsList className="">
-          <TabsTrigger value="gemini">GeminiPro Streaming</TabsTrigger>
-          <TabsTrigger value="openai">OpenAI Assistant</TabsTrigger>
+          <TabsTrigger value="gemini">GeminiPro Streaming Fast API</TabsTrigger>
+          {/* <TabsTrigger value="openai">OpenAI Assistant</TabsTrigger> */}
         </TabsList>
         <TabsContent value="gemini" className="w-full">
           <GeminiChatBox />
         </TabsContent>
-        <TabsContent value="openai" className="w-full">
+        {/* <TabsContent value="openai" className="w-full">
           <MapAIServiceAssistant />
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
 
       <AnimatedPage />

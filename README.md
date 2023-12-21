@@ -189,7 +189,6 @@ Through Cli
 
 ```
  gcloud run deploy ai-travel-assistant --image mjunaidca/travel_ai_assistant:latest
-```
 
 Then Go to Google Cloud and Click on "Edit & Deply New Revision"
 

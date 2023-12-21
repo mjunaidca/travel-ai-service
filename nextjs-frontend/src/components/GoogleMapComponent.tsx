@@ -15,7 +15,7 @@ const GoogleMapComponent: FC<GoogleMapComponentProps> = ({
   markers,
 }) => {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_JS_GOOGLE_MAPS_KEY!,
     libraries: ["places"],
   });
 
