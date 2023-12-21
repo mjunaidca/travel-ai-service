@@ -18,15 +18,21 @@ import Image from "next/image";
 import DownArrow from "../../../public/down.png";
 const features = [
   {
-    title: "AI-Powered Interactive Maps",
+    title: "GeminiPro Streaming FastAPI",
     id: "todo-list",
     card: Todo,
     visual: OtherVisual,
   },
   {
-    title: "Robust FASTAPI Backend Service",
+    title: "OpenAI Assistants FastAPI",
     id: "colors",
     card: Colors,
+    visual: OtherVisual,
+  },
+  {
+    title: "AI-Powered Interactive Maps",
+    id: "todo",
+    card: Todo,
     visual: OtherVisual,
   },
   {
@@ -36,7 +42,7 @@ const features = [
     visual: OtherVisual,
   },
   {
-    title: "User-Friendly Frontend: NextJS14 & Streamlit",
+    title: "Frontend in NextJS14 & Streamlit",
     id: "team",
     card: Team,
     visual: OtherVisual,

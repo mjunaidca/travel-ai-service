@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import GoogleMapComponent from "@/components/GoogleMapComponent";
-import ChatBox from "@/components/ChatBox";
-import ChatMessage from "@/components/ChatMessage";
+import ChatBox from "@/app/ui/openai/ChatBox";
+import ChatMessage from "@/app/ui/openai/ChatMessage";
 
 const MapAIServiceAssistant = () => {
   const [mapState, setMapState] = useState({

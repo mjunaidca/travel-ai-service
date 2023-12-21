@@ -164,106 +164,120 @@ class TravelAIChat():
 
                 if hasattr(part, 'function_call') and part.function_call is not None:
                     print("Got Function Response")
-                    function_call = part.function_call  # Corrected to use 'part.function_call'
-                    print("function_call", function_call)
+                    try:
+                        function_call = part.function_call  # Corrected to use 'part.function_call'
+                        print("function_call", function_call)
 
-                    print("Function Call Name:", function_call.name)
-                    function_call_name = available_functions[function_call.name]
+                            # Check if the function name exists in the available_functions dictionary
+                        if function_call.name in available_functions:
+                            function_call_name = available_functions[function_call.name]
+                            print("Function Call Name:", function_call.name)
+                            # ... (rest of your code for handling function calls)
+                        else:
+                            print(f"Function name '{function_call}' not recognized.")
+                            yield f"DM Dev. Gemini is Sleeping!"
+                        # function_call_name = available_functions[function_call.name]
 
-                    # Access 'args'
-                    if hasattr(function_call, 'args'):
-                        args = function_call.args
-                        # print("Content of 'args':", args)
+                        # Access 'args'
+                        if hasattr(function_call, 'args'):
+                            args = function_call.args
+                            # print("Content of 'args':", args)
 
-                        # Initialize variables with default values
-                        zoom = ai_powered_map["map_state"].get("zoom")
-                        longitude = ai_powered_map["map_state"].get("longitude")
-                        latitude = ai_powered_map["map_state"].get("latitude")
-                        longitudes, latitudes, labels = [], [], []
+                            # Initialize variables with default values
+                            zoom = ai_powered_map["map_state"].get("zoom")
+                            longitude = ai_powered_map["map_state"].get(
+                                "longitude")
+                            latitude = ai_powered_map["map_state"].get(
+                                "latitude")
+                            longitudes, latitudes, labels = [], [], []
 
-                        # Iterate over each item in 'args'
-                        for key, value in args.items():
-                            print("Key:", key, "Value:", value)
+                            # Iterate over each item in 'args'
+                            for key, value in args.items():
+                                print("Key:", key, "Value:", value)
 
-                            if key == "zoom":
+                                if key == "zoom":
+                                    try:
+                                        zoom = value
+                                    except Exception as e:
+                                        print(f"Error with 'zoom': {e}")
+
+                                if key == "longitude":
+                                    try:
+                                        longitude = value
+                                    except Exception as e:
+                                        print(f"Error with 'longitude': {e}")
+
+                                if key == "latitude":
+                                    try:
+                                        latitude = value
+                                    except Exception as e:
+                                        print(f"Error with 'latitude': {e}")
+
+                                if key == "longitudes":
+                                    try:
+                                        longitudes = [v for v in value]
+                                    except Exception as e:
+                                        print(f"Error with 'longitudes': {e}")
+
+                                if key == "latitudes":
+                                    try:
+                                        latitudes = [v for v in value]
+                                    except Exception as e:
+                                        print(f"Error with 'latitudes': {e}")
+
+                                if key == "labels":
+                                    try:
+                                        labels = [v for v in value]
+                                    except Exception as e:
+                                        print(f"Error with 'labels': {e}")
+
+                            # Print extracted values
+                            print("zoom =", zoom)
+                            print("longitude =", longitude)
+                            print("longitudes =", longitudes)
+                            print("latitude =", latitude)
+                            print("latitudes =", latitudes)
+                            print("labels =", labels)
+
+                            map_update_call_func = function_call_name(labels=labels,
+                                                                      latitudes=latitudes,
+                                                                      longitudes=longitudes,
+                                                                      latitude=latitude,
+                                                                      longitude=longitude,
+                                                                      zoom=zoom
+                                                                      )
+
+                            print("map_update_call", map_update_call_func)
+
+                            time.sleep(0.5)
+
+                            list_content: ContentsType = [prompt, json.dumps(map_update_call_func["status"]), f"Now help users with travel planning in {' '.join(labels)} - Don't call the function as Map is updated"]
+                            print('list_content', list_content)
+
+                            func_call_gemini_response = self.assistant.send_message(
+                                list_content,
+                                stream=True
+                            )
+
+                            for message in func_call_gemini_response:
+                                part = message.candidates[0].content.parts[0]
+
                                 try:
-                                    zoom = value
-                                except Exception as e:
-                                    print(f"Error with 'zoom': {e}")
-
-                            if key == "longitude":
-                                try:
-                                    longitude = value
-                                except Exception as e:
-                                    print(f"Error with 'longitude': {e}")
-
-                            if key == "latitude":
-                                try:
-                                    latitude = value
-                                except Exception as e:
-                                    print(f"Error with 'latitude': {e}")
-
-                            if key == "longitudes":
-                                try:
-                                    longitudes = [v for v in value]
-                                except Exception as e:
-                                    print(f"Error with 'longitudes': {e}")
-
-                            if key == "latitudes":
-                                try:
-                                    latitudes = [v for v in value]
-                                except Exception as e:
-                                    print(f"Error with 'latitudes': {e}")
-
-                            if key == "labels":
-                                try:
-                                    labels = [v for v in value]
-                                except Exception as e:
-                                    print(f"Error with 'labels': {e}")
-
-                        # Print extracted values
-                        print("zoom =", zoom)
-                        print("longitude =", longitude)
-                        print("longitudes =", longitudes)
-                        print("latitude =", latitude)
-                        print("latitudes =", latitudes)
-                        print("labels =", labels)
-
-
-                        map_update_call_func = function_call_name(labels=labels,
-                                                                  latitudes=latitudes,
-                                                                  longitudes=longitudes,
-                                                                  latitude=latitude,
-                                                                  longitude=longitude,
-                                                                  zoom=zoom
-                                                                  )
-
-                        print("map_update_call", map_update_call_func)
-
-                        time.sleep(0.5)
-
-                        list_content: ContentsType = [prompt, json.dumps(map_update_call_func), f"Now help users with travel planning in {' '.join(labels)} - no function calling. Don;t reshared the map coordinates and markers"]
-
-                        print('list_content', list_content)
-
-                        func_call_gemini_response = self.assistant.send_message(
-                            list_content,
-                            stream=True
-                        )
-
-                        for message in func_call_gemini_response:
-                            part = message.candidates[0].content.parts[0]
-
-                            # Check if 'text' property is present and has content
-                            text_content = part.text if hasattr(part, 'text') else None
-                            if text_content:
-                                print("Got Text:", text_content)
-                                yield text_content
-                            else:
-                                print("No text content available in part:", part)
-                                # Handle the case of no text content if needed
-
-
+                                    text_content = part.text if hasattr(part, 'text') else None
+                                    if text_content:
+                                        print("Got Func Calling Text:", text_content)
+                                        yield text_content
+                                except ValueError:
+                                    # Handle cases where 'text' property is present but no actual text content is available
+                                    print(
+                                        "No text content available in part:", part)
+                                    yield "Gemini is Sleeping!"
+                                    # Implement additional handling if necessary, e.g., continue, log, etc.
+                                    pass
+                    except ValueError as e:
+                        print(f"Error processing function call: {e}")
+                        yield "Funcation Calling Failed! Gemini is Sleeping!"
+                        pass
                 else:
                     # print("Got Nothing")
                     yield "Got Nothing"

@@ -1,20 +1,33 @@
-import React from "react";
-import MapAIServiceAssistant from "./ui/MapAIServiceAssistant";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatedPage } from "./ui/AnimatedHero";
 import BottomBar from "@/components/BottomBar";
+import MapAIServiceAssistant from "./ui/openai/MapAIServiceAssistant";
+import GeminiChatBox from "./ui/gemini/GeminiChatBox";
 
 const page = () => {
   return (
-    <div className="flex flex-col w-full h-full mx-auto justify-center px-4">
-      {/* <h1 className="scroll-m-20 py-7 pt-20 text-4xl tracking-tight lg:text-5xl font-semibold first:mt-0 w-fit mx-auto">
-        Wandering AI Travel Assistant
-      </h1> */}
+    <div className="flex flex-col w-full h-full mx-auto item justify-center px-4">
       <h2 className="scroll-m-20 border-b py-1 pt-20  text-4xl md:text-5xl font-semibold tracking-tight first:mt-0 w-fit mx-4 max-w-4xl">
-        Wandering AI Travel Assistant
+        Wandering AI Assistant
       </h2>
-      <MapAIServiceAssistant />
+      <Tabs
+        defaultValue="gemini"
+        className=" p-5 flex flex-col items-center justify-center"
+      >
+        <TabsList className="">
+          <TabsTrigger value="gemini">GeminiPro Streaming</TabsTrigger>
+          <TabsTrigger value="openai">OpenAI Assistant</TabsTrigger>
+        </TabsList>
+        <TabsContent value="gemini" className="w-full">
+          <GeminiChatBox />
+        </TabsContent>
+        <TabsContent value="openai" className="w-full">
+          <MapAIServiceAssistant />
+        </TabsContent>
+      </Tabs>
+
       <AnimatedPage />
-      <BottomBar />
+      <BottomBar /> 
     </div>
   );
 };
