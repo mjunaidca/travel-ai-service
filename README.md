@@ -3,20 +3,22 @@
 - FastAPI Backend To Manage and Scale Microservice
    - Geminin Pro Function Calling Streaming API
    - OpenAI Assistants API
-
 - A Simple NextJS 14  Frontend to test your MVP
 - For python geeks a Streamlit Frontend to test your MVP
 - Pydanitc and SQLAlchemy ORM to Save and Update Client Chat in Neon Postgress Database
 
 Note: To locally run Gemini API Endpoints first setup your google vertex ai account
 ```https://cloud.google.com/sdk/docs/initializing```
-
 This Travel Assistant Application is designed to test complete Generative AI Applications Scalable Architecture. 
 
 We have extensively explored gemini pro function calling, and open ai dev day features. The services are developed using FastAPI framework and the Frontend frontier is powered with NextJS 14 as well as streamlit for pure python devs.
 
 The AI Powered Maps are powered with "Google Maps javascript API" for NextJS and "Plotly with MapBox" for streamlit.
 
+In this video I have walkthrough the overall architecture and gemini pro streaming api pipeline, and function calling architecture.
+
+[<img src="https://img.youtube.com/vi/qas4aLEkXTk/hqdefault.jpg" width="580" height="360"
+/>](https://www.youtube.com/embed/qas4aLEkXTk)
 
 ## Features
 
