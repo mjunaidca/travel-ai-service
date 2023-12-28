@@ -10,6 +10,7 @@ from vertexai.preview.generative_models import (
 from vertexai.generative_models._generative_models import GenerationResponse, ContentsType
 from typing import Union, Iterable
 import json
+import asyncio
 
 BASE_PROMPT: str = """You are an AI Travel Assistant who make global travellers traval planning fun and interactive:
 
@@ -287,12 +288,19 @@ ai_travel_maanger: TravelAIChat = TravelAIChat(
     gemini_pro_model=gemini_pro_model, initial_history=chat_history)
 
 
-def call_gemini_travel_assistant(prompt: str):
-    # Wait for the assistant to complete
-    messages = ai_travel_maanger.run_assistant(prompt)
-
-    # Collect all responses from the generator
-    for message in messages:
-        print('GemininService:', message)
-        yield message
-    yield "__END__"  # special marker to indicate end of stream
+async def call_gemini_travel_assistant(prompt: str):
+    complete_response = ""
+    try:
+        for response in ai_travel_maanger.run_assistant(prompt):
+            if response == "__END__":
+                break
+            yield response
+            print("response", response)
+            await asyncio.sleep(0.05)  # Adjust delay as needed
+            complete_response += response
+    except Exception as e:
+        # Handle specific exceptions as needed
+        print(f"Error during streaming: {e}")
+        yield "An error occurred: " + str(e)
+    finally:
+        print('complete_response', complete_response)
